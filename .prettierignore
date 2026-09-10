@@ -1,0 +1,9 @@
+dist
+node_modules
+public
+.idea
+.vscode
+.workbuddy
+package-lock.json
+*.md
+*.svg

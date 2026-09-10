@@ -43,8 +43,7 @@ service.interceptors.response.use(
     return res as any
   },
   (error) => {
-    const message =
-      error.response?.data?.message || error.message || '网络异常，请稍后重试'
+    const message = error.response?.data?.message || error.message || '网络异常，请稍后重试'
     ElMessage.error(message)
     return Promise.reject(error)
   }

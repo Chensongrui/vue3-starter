@@ -35,9 +35,7 @@ const stats = ref([
             集成了路由、状态管理、组件库与请求封装，适合用来做练习或作为新项目起点。
           </p>
           <div class="welcome-actions">
-            <el-button type="primary" @click="router.push('/demo/table')">
-              查看表格示例
-            </el-button>
+            <el-button type="primary" @click="router.push('/demo/table')"> 查看表格示例 </el-button>
             <el-button @click="router.push('/about')">了解工程结构</el-button>
           </div>
         </div>

@@ -339,13 +339,42 @@ npm install
 **7. 一直停在登录页、无法进入首页**
 守卫在拿到 `userInfo` 之前会等待 `fetchUserInfo()`。若改成了真实接口，确认 `/user/info` 返回结构与 `src/api/user.ts` 中的类型一致。
 
-## 七、下一步可以练习什么
+## 七、代码规范（ESLint + Prettier）
+
+工程已集成 **ESLint 10（扁平配置）+ Prettier 3**，覆盖 `.js / .ts / .vue / .scss / .json`。
+
+| 命令                | 作用                                       |
+| ------------------- | ------------------------------------------ |
+| `npm run lint`      | 检查全部代码（含 Prettier 格式，只报不改） |
+| `npm run lint:fix`  | 检查并自动修复可修复问题                   |
+| `npm run format`     | 用 Prettier 格式化全部源码                 |
+| `npm run format:check` | 只检查格式是否符合规范（适合放 CI）     |
+| `npm run type-check` | TS 类型检查（`vue-tsc`）                   |
+
+相关配置文件：
+
+| 文件                | 说明                                                             |
+| ------------------- | ---------------------------------------------------------------- |
+| `eslint.config.js`  | ESLint 扁平配置：`JS → TypeScript → Vue3 → 团队规则 → Prettier`   |
+| `.prettierrc`       | 格式化风格：无分号、单引号、2 空格、行宽 100、无尾逗号、LF         |
+| `.prettierignore`   | 不需要格式化的目录/文件                                          |
+| `.editorconfig`     | 编辑器层统一缩进与换行（IDE 通用）                               |
+| `.vscode/settings.json` | 保存时自动 `eslint --fix` + Prettier 格式化                  |
+
+要点说明：
+
+- **Prettier 只管格式，ESLint 管质量**。两者冲突的规则由 `eslint-config-prettier` 统一关闭，格式化差异以 `prettier/prettier` 规则报错并支持 `--fix`，因此只需要跑一条 `npm run lint:fix`。
+- **类型检查与 lint 分离**：ESLint 不开启类型感知规则（更快），类型问题交给 `npm run type-check`。
+- **提交前建议**：本地先跑 `npm run lint && npm run type-check`；如需强制约束，可再加 `husky` + `lint-staged` 做提交前校验。
+- VS Code 用户请安装推荐插件（打开项目时会提示）：`ESLint`、`Prettier - Code formatter`、`Vue - Official`。
+
+## 八、下一步可以练习什么
 
 - 接入真实后端接口，把 `views/demo/table.vue` 改成请求数据渲染；
 - 把 `userStore` 里的 mock 登录换成 `src/api/user.ts` 的真实接口，并给 token 加过期时间；
 - 把菜单改为**根据后端返回的权限动态生成**（参考 RBAC 思路），配合 `roles` 做按钮级权限；
 - 按需引入 Element Plus（`unplugin-vue-components` + `unplugin-auto-import`）减小打包体积；
-- 集成 ESLint + Prettier 统一代码规范；
+- 用 `husky` + `lint-staged` 把 `npm run lint` 做成提交前钩子；
 - 增加暗黑模式切换（Element Plus 支持 `dark` 类）。
 
 ---

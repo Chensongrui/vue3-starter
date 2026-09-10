@@ -34,9 +34,7 @@ export const useUserStore = defineStore('user', () => {
   const userInfo = ref<UserInfo | null>(null)
 
   const isLoggedIn = computed(() => !!token.value)
-  const nickname = computed(
-    () => userInfo.value?.nickname || userInfo.value?.username || '未登录'
-  )
+  const nickname = computed(() => userInfo.value?.nickname || userInfo.value?.username || '未登录')
   const roles = computed(() => userInfo.value?.roles ?? [])
   const avatarText = computed(() => nickname.value.charAt(0).toUpperCase())
 

@@ -10,6 +10,7 @@ dist-ssr
 # 编辑器 / 系统
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo

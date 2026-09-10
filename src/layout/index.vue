@@ -13,10 +13,12 @@ const userStore = useUserStore()
 
 // 面包屑：取当前匹配到的、带 title 的路由
 const breadcrumbs = computed(() =>
-  route.matched.filter((item) => item.meta?.title).map((item) => ({
-    path: item.path,
-    title: item.meta.title as string
-  }))
+  route.matched
+    .filter((item) => item.meta?.title)
+    .map((item) => ({
+      path: item.path,
+      title: item.meta.title as string
+    }))
 )
 
 // 顶栏下拉菜单
@@ -45,10 +47,7 @@ async function handleCommand(command: string | number | object) {
 <template>
   <el-container class="layout">
     <!-- 左侧菜单 -->
-    <el-aside
-      class="layout-aside"
-      :width="appStore.sidebarCollapsed ? '64px' : '220px'"
-    >
+    <el-aside class="layout-aside" :width="appStore.sidebarCollapsed ? '64px' : '220px'">
       <div class="logo">
         <img src="/favicon.svg" alt="logo" class="logo-img" />
         <span v-show="!appStore.sidebarCollapsed" class="logo-title">Vue3 Starter</span>

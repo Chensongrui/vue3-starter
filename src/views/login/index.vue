@@ -77,12 +77,7 @@ async function handleLogin() {
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input
-            v-model="form.password"
-            type="password"
-            placeholder="密码"
-            show-password
-          >
+          <el-input v-model="form.password" type="password" placeholder="密码" show-password>
             <template #prefix>
               <el-icon><Lock /></el-icon>
             </template>
@@ -90,12 +85,7 @@ async function handleLogin() {
         </el-form-item>
 
         <el-form-item>
-          <el-button
-            type="primary"
-            class="login-btn"
-            :loading="loading"
-            @click="handleLogin"
-          >
+          <el-button type="primary" class="login-btn" :loading="loading" @click="handleLogin">
             登 录
           </el-button>
         </el-form-item>

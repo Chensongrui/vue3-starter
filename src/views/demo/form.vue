@@ -71,13 +71,7 @@ function handleReset() {
         </div>
       </template>
 
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="90px"
-        class="form"
-      >
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="90px" class="form">
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入姓名" clearable />
         </el-form-item>
@@ -116,12 +110,7 @@ function handleReset() {
         </el-form-item>
 
         <el-form-item label="备注">
-          <el-input
-            v-model="form.remark"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入备注"
-          />
+          <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
         </el-form-item>
 
         <el-form-item>
