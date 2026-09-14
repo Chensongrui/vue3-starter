@@ -3,14 +3,17 @@ import { computed, nextTick, reactive, ref, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ROLE_OPTIONS } from '../types'
 import type { UserFormPayload, UserRow, UserStatus } from '../types'
+import { useUsersStore } from '@/store/modules/users'
 
-/** 传入 null 表示新增，传入行数据表示编辑 */
+const usersStore = useUsersStore()
+
+/** 传入 null 表示新增，传入 id 表示编辑（弹窗按 id 自行查行数据回填） */
 const props = defineProps<{
-  row: UserRow | null
+  id: number | null
 }>()
 
 /** 弹窗显示/隐藏，父组件用 v-model 绑定 */
-const visible = defineModel<boolean>({ required: true })
+const visible = defineModel<boolean>({ required: true})
 
 const emit = defineEmits<{
   submit: [payload: UserFormPayload]
@@ -46,14 +49,17 @@ const rules: FormRules<FormModel> = {
   role: [{ required: true, message: '请选择角色', trigger: 'change' }]
 }
 
-const isEdit = computed(() => props.row !== null)
+const isEdit = computed(() => props.id !== null)
 
-// 每次打开都用最新的行数据填充表单（新增则清空）
+// 每次打开：编辑时按 id 从 store 查行回填，新增时清空
 watch(visible, async (open) => {
   if (!open) return
-  if (props.row) {
-    const { id, name, email, phone, role, status } = props.row
-    Object.assign(form, { id, name, email, phone, role, status })
+  if (props.id != null) {
+    const row = usersStore.getUserById(props.id)
+    if (row) {
+      const { id, name, email, phone, role, status } = row
+      Object.assign(form, { id, name, email, phone, role, status })
+    }
   } else {
     Object.assign(form, createEmptyForm())
   }

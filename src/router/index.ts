@@ -54,6 +54,18 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: 'StoreDemo',
         component: () => import('@/views/demo/store.vue'),
         meta: { title: 'Pinia 示例', icon: 'Coin' }
+      },
+      {
+        path: 'vxe-table',
+        name: 'VxeTableDemo',
+        component: () => import('@/views/demo/vxe-table.vue'),
+        meta: { title: 'VxeTable 示例', icon: 'Tickets' }
+      },
+      {
+        path: 'vue3',
+        name: 'Vue3Demo',
+        component: () => import('@/views/demo/vue3.vue'),
+        meta: { title: 'vue3示例', icon: 'Star' }
       }
     ]
   }

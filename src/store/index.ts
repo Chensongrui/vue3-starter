@@ -14,3 +14,4 @@ export { pinia }
 export * from './modules/app'
 export * from './modules/user'
 export * from './modules/counter'
+export * from './modules/users'

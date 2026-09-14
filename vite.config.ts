@@ -36,7 +36,8 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             vue: ['vue', 'vue-router', 'pinia'],
-            'element-plus': ['element-plus', '@element-plus/icons-vue']
+            'element-plus': ['element-plus', '@element-plus/icons-vue'],
+            'vxe-table': ['vxe-table', 'vxe-pc-ui']
           }
         }
       }

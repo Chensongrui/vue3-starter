@@ -51,3 +51,31 @@ a {
 .page-container {
   padding: 0;
 }
+
+/* ===== vxe-table 与 Element Plus 主题对齐 =====
+ * 变量名取自 vxe-table 4.x 实际样式表（注意前缀是 --vxe-ui-，不是 --vxe-）
+ * 主色统一为 Element Plus 的 #409eff，避免出现两套蓝
+ */
+:root {
+  --vxe-ui-font-primary-color: #409eff;
+  --vxe-ui-font-color: #303133;
+  --vxe-ui-table-border-color: #ebeef5;
+  --vxe-ui-table-header-background-color: #f5f7fa;
+  --vxe-ui-table-header-font-color: #909399;
+  --vxe-ui-input-border-color: #dcdfe6;
+  --vxe-ui-base-hover-background-color: #f5f7fa;
+  --vxe-ui-border-radius: 4px;
+}
+
+/* 修复 vxe 按钮文字不垂直居中（与 Element Plus 混用时的已知问题） */
+.vxe-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 修复表格边框重叠导致的双线 */
+.vxe-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}

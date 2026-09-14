@@ -1,7 +1,7 @@
 # Vue3 Starter
 
 一套开箱即用的 Vue3 基础工程模板，参考主流开源项目（如 vue-manage-system、Geeker-Admin）的目录组织方式搭建。
-技术栈：**Vue 3 + Vite + TypeScript + Vue Router 4 + Pinia + Element Plus + Axios**。
+技术栈：**Vue 3 + Vite + TypeScript + Vue Router 4 + Pinia + Element Plus + VxeTable + Axios**。
 
 适合用来：学习 Vue3 全家桶、做练手项目、作为新项目的起步脚手架。
 
@@ -67,13 +67,16 @@ vue3-starter
 │   │       └── counter.ts  计数器示例（state/getter/action）
 │   ├── styles/
 │   │   └── index.scss      全局样式
+│   ├── composables/        组合式函数
+│   │   └── useVxeClipboard.ts 给 vxe-table 补上 Excel 复制粘贴（免费版缺失的能力）
 │   ├── utils/
-│   │   └── auth.ts         token 统一读写（getToken / setToken / removeToken）
+│   │   ├── auth.ts         token 统一读写（getToken / setToken / removeToken）
+│   │   └── vxe.ts          vxe 全局配置（尺寸对齐、弹层层级）
 │   ├── views/              页面
 │   │   ├── login/          登录页
 │   │   ├── home/           首页
 │   │   ├── about/          关于工程
-│   │   ├── demo/           功能示例：表格 / 表单 / Pinia
+│   │   ├── demo/           功能示例：表格 / 表单 / Pinia / VxeTable
 │   │   └── error/404.vue   404 页面
 │   ├── App.vue             根组件
 │   ├── main.ts             入口文件（注册组件库、路由、Pinia）
@@ -307,6 +310,7 @@ router.replace((route.query.redirect as string) || '/')
 | 首页 | `/home` | 卡片布局、`el-statistic`、Pinia 计数联动 |
 | 关于工程 | `/about` | `el-descriptions`、`el-table`、目录结构说明 |
 | 表格示例 | `/demo/table` | `el-table` + 搜索 + 分页 + 操作列 + 二次确认 |
+| VxeTable 示例 | `/demo/vxe-table` | 虚拟滚动 + 固定列 / 行内编辑 + 校验 / 树形 / 多级表头 + 合并 / 导出 |
 | 表单示例 | `/demo/form` | `el-form` 校验、各类表单控件 |
 | Pinia 示例 | `/demo/store` | state / getter / action、`storeToRefs` 用法 |
 
@@ -376,6 +380,38 @@ npm install
 - 按需引入 Element Plus（`unplugin-vue-components` + `unplugin-auto-import`）减小打包体积；
 - 用 `husky` + `lint-staged` 把 `npm run lint` 做成提交前钩子；
 - 增加暗黑模式切换（Element Plus 支持 `dark` 类）。
+
+## 九、表格选型：什么时候用 el-table，什么时候用 vxe-table？
+
+工程里两套表格共存，按场景选，不要为了统一而统一：
+
+| 场景 | 用哪个 | 原因 |
+| --- | --- | --- |
+| 简单展示：几百行内 + 后端分页 + 排序筛选 | `el-table` | 上手快、和 EP 观感天然一致 |
+| 数据量大（千行以上） | `vxe-table` | `el-table` 全量渲染 DOM 会卡，`el-table-v2` 又缺功能 |
+| 行内编辑 + 数据校验 | `vxe-table` | 原生支持，el-table 需要大量二次封装 |
+| Excel 导入导出 / 打印 | `vxe-table` | 原生支持，el-table 没有 |
+| 树形、多级表头、合并单元格、固定列叠加 | `vxe-table` | 组合场景下 el-table-v2 有已知 bug |
+
+### 使用要点
+
+- vxe 已在 `main.ts` 全局注册，模板里直接写 `<vxe-table>` / `<vxe-column>`，无需 import
+- 全局配置集中在 `src/utils/vxe.ts`：尺寸对齐（EP `default` → vxe `small`）、`zIndex: 4096` 防止被 EP 弹窗遮挡
+- 主题色在 `src/styles/index.scss` 中用 `--vxe-ui-*` 变量对齐到 Element Plus 的 `#409eff`（注意前缀是 `--vxe-ui-`，不是 `--vxe-`）
+- 版本号一律用 `~` 锁小版本（`~4.21.10`），vxe 迭代快，官方明确不建议用 `^`
+- 编辑态用 Element Plus 组件（在 `#edit` 插槽里放 `el-input` / `el-select`），避免引入第二套表单观感
+
+### 已知限制
+
+- **单元格区域框选、单元格复制/粘贴、查找替换属于 vxe 企业版付费功能**，免费版没有。
+  本工程用 `src/composables/useVxeClipboard.ts` 做了轻量兜底：
+  从 Excel 复制一片区域 → 点住起始单元格 → `Ctrl+V` 批量写入；`Ctrl+C` 复制勾选行（未勾选则复制当前行）。
+- 导出内置支持 CSV / HTML。需要 .xlsx 时官方插件 `vxe-table-plugin-export-xlsx` 最后更新于 2024-10，
+  与 vxe 4.21 的兼容性存疑，更稳妥的做法是用 `xlsx` 库自行实现或走后端导出。
+- **体积**：`npm run build` 后 vxe chunk 约 1187 KB（gzip 361 KB），已通过 `manualChunks` 单独拆出。
+  其中 `app.use(VxeUI)` 占了大头（约 647 KB / gzip 192 KB），它提供导出面板、筛选面板、内置编辑渲染器等
+  依赖的全局组件。注释掉 `src/main.ts` 里的这行可降到 539 KB（gzip 168 KB），
+  代价是这些弹层面板不可用（直接调 `exportData()` 导出仍正常）。按项目对体积的敏感度二选一。
 
 ---
 
