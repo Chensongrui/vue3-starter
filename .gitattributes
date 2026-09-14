@@ -1,0 +1,16 @@
+# 统一使用 LF 行尾，消除 Windows 下 core.autocrlf=true 导致的 CRLF 警告
+* text=auto eol=lf
+
+# 明确标记为二进制的文件，禁止行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary
